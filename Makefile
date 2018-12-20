@@ -16,7 +16,7 @@ build/test_trie: src/word_list.c src/trie.c test/test_trie.c
 
 build/word_analysis: src/*.c tools/word_analysis.c
 	mkdir -p build
-	gcc -o $@ $^ $(CFLAGS)
+	gcc -o $@ $^ -O3 $(CFLAGS)
 
 clean:
 	rm -rf build
