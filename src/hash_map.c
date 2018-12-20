@@ -49,12 +49,15 @@ static void _word_freqs_free(struct word_freqs* f) {
 }
 
 static unsigned int _hash_word(const char* word) {
-  char full_word[4];
+  char full_word[sizeof(unsigned int) * 4];
   bzero(full_word, sizeof(full_word));
   strncpy(full_word, word, sizeof(full_word));
-  return (unsigned int)full_word[0] | ((unsigned int)full_word[1] << 8) |
-         ((unsigned int)full_word[2] << 16) |
-         ((unsigned int)full_word[3] << 24);
+  unsigned int result;
+  for (int i = 0; i < sizeof(full_word) - sizeof(unsigned int) + 1; ++i) {
+    unsigned int* ptr = (unsigned int*)(full_word + i);
+    result += (*ptr);
+  }
+  return result;
 }
 
 struct hash_map* hash_map_new(int num_bins) {
