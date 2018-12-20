@@ -1,5 +1,5 @@
-// A simple tool to analyze the top words in a document.
-// Send standard input to this program.
+// A simple tool to dump the list of top words.
+// Operates on standard input.
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -16,7 +16,7 @@ int main(int argc, const char** argv) {
     fprintf(stderr, "failed to create word list.\n");
     return -1;
   }
-  for (int i = 0; i < 5 && i < words->num_words; ++i) {
-    printf("word %d: %s\n", i, word_list_lookup(words, i + 1));
+  for (int i = 0; i < words->num_words; ++i) {
+    printf("%s\n", word_list_lookup(words, i + 1));
   }
 }
