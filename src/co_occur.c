@@ -90,25 +90,35 @@ struct co_occur_entry* co_occur_entry(struct co_occur* c,
   return _co_occur_row_entry(&c->rows[word1], word2);
 }
 
-void co_occur_add(struct co_occur* c, int word1, int word2) {
+int co_occur_add(struct co_occur* c, int word1, int word2) {
   struct co_occur_entry* entry = co_occur_entry(c, word1, word2);
+  if (!entry) {
+    return 0;
+  }
   ++entry->count;
+  return 1;
 }
 
 int co_occur_get(struct co_occur* c, int word1, int word2) {
   struct co_occur_entry* entry = co_occur_entry(c, word1, word2);
+  if (!entry) {
+    return 0;
+  }
   return entry->count;
 }
 
-void co_occur_add_document(struct co_occur* c,
-                           int* words,
-                           int num_words,
-                           int window) {
+int co_occur_add_document(struct co_occur* c,
+                          int* words,
+                          int num_words,
+                          int window) {
   for (int i = 0; i < num_words; ++i) {
     for (int j = i - 1; j >= 0 && j >= i - window; --j) {
-      co_occur_add(c, words[i], words[j]);
+      if (!co_occur_add(c, words[i], words[j])) {
+        return 0;
+      }
     }
   }
+  return 1;
 }
 
 void co_occur_free(struct co_occur* c) {

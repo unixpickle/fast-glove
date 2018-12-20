@@ -26,12 +26,12 @@ struct co_occur {
 
 struct co_occur* co_occur_new(int num_rows);
 struct co_occur_entry* co_occur_entry(struct co_occur* c, int word1, int word2);
-void co_occur_add(struct co_occur* c, int word1, int word2);
+int co_occur_add(struct co_occur* c, int word1, int word2);
 int co_occur_get(struct co_occur* c, int word1, int word2);
-void co_occur_add_document(struct co_occur* c,
-                           int* words,
-                           int num_words,
-                           int window);
+int co_occur_add_document(struct co_occur* c,
+                          int* words,
+                          int num_words,
+                          int window);
 void co_occur_free(struct co_occur* c);
 
 struct co_occur_pair {

@@ -73,7 +73,7 @@ struct trie* trie_new() {
   return res;
 }
 
-static int _trie_add(struct trie* t, const char* word) {
+static void _trie_add(struct trie* t, const char* word) {
   if (word[0] == 0) {
     ++t->value;
     return 1;
