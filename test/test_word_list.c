@@ -17,6 +17,7 @@ int main() {
   assert(1 == inv_word_list_lookup(inv, "hello"));
   assert(2 == inv_word_list_lookup(inv, "world"));
   assert(3 == inv_word_list_lookup(inv, "awesome"));
+  assert(0 == inv_word_list_lookup(inv, "awesome123"));
 
   inv_word_list_free(inv);
   word_list_free(list);
