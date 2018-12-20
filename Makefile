@@ -1,6 +1,6 @@
 CFLAGS=-Isrc -Wall
 
-all: build/test_word_list build/test_co_occur build/test_trie build/word_analysis
+all: build/test_word_list build/test_co_occur build/test_hash_map build/word_analysis
 
 build/test_word_list: src/word_list.c test/test_word_list.c
 	mkdir -p build
@@ -10,7 +10,7 @@ build/test_co_occur: src/co_occur.c test/test_co_occur.c
 	mkdir -p build
 	gcc -o $@ $^ $(CFLAGS) 
 
-build/test_trie: src/word_list.c src/trie.c test/test_trie.c
+build/test_hash_map: src/word_list.c src/hash_map.c test/test_hash_map.c
 	mkdir -p build
 	gcc -o $@ $^ $(CFLAGS)
 

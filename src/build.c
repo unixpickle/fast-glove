@@ -2,7 +2,7 @@
 #include <ctype.h>
 #include <stdlib.h>
 #include <string.h>
-#include "trie.h"
+#include "hash_map.h"
 
 #define DELIMITERS " \t\n,\"'.!;"
 #define IS_DELIMITER(c)                                                       \
@@ -69,7 +69,7 @@ struct co_occur* build_co_occur(struct inv_word_list* list,
 }
 
 struct word_list* build_word_list(FILE* documents, int max_words) {
-  struct trie* t = trie_new();
+  struct hash_map* h = hash_map_new(max_words);
   char word[WORD_MAX_LENGTH];
   int word_len = 0;
   int ch = 0;
@@ -79,8 +79,8 @@ struct word_list* build_word_list(FILE* documents, int max_words) {
       if (word_len) {
         word[word_len] = 0;
         word_len = 0;
-        if (!trie_add(t, word)) {
-          trie_free(t);
+        if (!hash_map_add(h, word)) {
+          hash_map_free(h);
           return NULL;
         }
       }
@@ -88,7 +88,7 @@ struct word_list* build_word_list(FILE* documents, int max_words) {
       word[word_len++] = (char)tolower(ch);
     }
   }
-  struct word_list* result = trie_words(t, max_words);
-  trie_free(t);
+  struct word_list* result = hash_map_words(h, max_words);
+  hash_map_free(h);
   return result;
 }

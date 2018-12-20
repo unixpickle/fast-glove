@@ -21,12 +21,12 @@ static struct co_occur_entry* _co_occur_bin_entry(struct co_occur_bin* bin,
   }
   if (bin->num_entries == bin->capacity) {
     struct co_occur_entry* new_entries = realloc(
-        bin->entries, 2 * bin->capacity * sizeof(struct co_occur_entry));
+        bin->entries, (1 + 2 * bin->capacity) * sizeof(struct co_occur_entry));
     if (!new_entries) {
       return NULL;
     }
     bin->entries = new_entries;
-    bin->capacity *= 2;
+    bin->capacity = 1 + 2 * bin->capacity;
   }
   struct co_occur_entry* res = &bin->entries[bin->num_entries++];
   res->count = 0;
