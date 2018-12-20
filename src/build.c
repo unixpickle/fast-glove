@@ -1,16 +1,17 @@
 #include "build.h"
+#include <ctype.h>
+#include <stdlib.h>
 #include <string.h>
 #include "trie.h"
 
 #define DELIMITERS " \t\n,\"'.!;"
-#define IS_DELIMITER(c)                                                      \
-  (c == ' ' || c == '\t' || c == ',' || c == '"' || c == '\'' || c == '.' || \
-   c == '!' || c == ';')
+#define IS_DELIMITER(c)                                                       \
+  (c == ' ' || c == '\t' || c == '\n' || c == ',' || c == '"' || c == '\'' || \
+   c == '.' || c == '!' || c == ';')
 
 static int _doc_to_words(struct inv_word_list* list,
                          char* document,
                          int* words) {
-  int len = strlen(document);
   int word_index = 0;
   char* saveptr;
   char* token = strtok_r(document, DELIMITERS, &saveptr);
