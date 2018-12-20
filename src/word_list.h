@@ -13,7 +13,7 @@ struct word_list {
   int capacity;
 };
 
-struct word_list* word_list_alloc();
+struct word_list* word_list_new();
 void word_list_free(struct word_list* list);
 int word_list_add(struct word_list* list, const char* word);
 const char* word_list_lookup(struct word_list* list, int id);

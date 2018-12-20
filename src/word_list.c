@@ -4,12 +4,12 @@
 #include <unistd.h>
 
 static int _inv_word_compare(const void* word1, const void* word2) {
-  struct inv_word* inv1 = word1;
-  struct inv_word* inv2 = word2;
+  const struct inv_word* inv1 = word1;
+  const struct inv_word* inv2 = word2;
   return strncmp(inv1->word, inv2->word, WORD_MAX_LENGTH);
 }
 
-struct word_list* word_list_alloc() {
+struct word_list* word_list_new() {
   struct word_list* result = malloc(sizeof(struct word_list));
   if (!result) {
     return NULL;
@@ -21,6 +21,7 @@ struct word_list* word_list_alloc() {
   }
   result->num_words = 0;
   result->capacity = 1;
+  return result;
 }
 
 void word_list_free(struct word_list* list) {
@@ -69,6 +70,7 @@ struct inv_word_list* inv_word_list_new(struct word_list* list) {
   }
   qsort(result->words, result->num_words, sizeof(struct inv_word),
         _inv_word_compare);
+  return result;
 }
 
 int inv_word_list_lookup(struct inv_word_list* list, const char* word) {
