@@ -52,7 +52,7 @@ static unsigned int _hash_word(const char* word) {
   char full_word[sizeof(unsigned int) * 4];
   bzero(full_word, sizeof(full_word));
   strncpy(full_word, word, sizeof(full_word));
-  unsigned int result;
+  unsigned int result = 0;
   for (int i = 0; i < sizeof(full_word) - sizeof(unsigned int) + 1; ++i) {
     unsigned int* ptr = (unsigned int*)(full_word + i);
     result += (*ptr);
