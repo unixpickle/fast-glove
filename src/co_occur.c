@@ -100,6 +100,17 @@ int co_occur_get(struct co_occur* c, int word1, int word2) {
   return entry->count;
 }
 
+void co_occur_add_document(struct co_occur* c,
+                           int* words,
+                           int num_words,
+                           int window) {
+  for (int i = 0; i < num_words; ++i) {
+    for (int j = i - 1; j >= 0 && j >= i - window; --j) {
+      co_occur_add(c, words[i], words[j]);
+    }
+  }
+}
+
 void co_occur_free(struct co_occur* c) {
   for (int i = 0; i < c->num_rows; ++i) {
     _co_occur_row_destroy(&c->rows[i]);
