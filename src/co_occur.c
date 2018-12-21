@@ -182,6 +182,7 @@ struct co_occur_pairs* co_occur_pairs_new(struct co_occur* c) {
         if (entry->other) {
           results[idx].word1 = i;
           results[idx].word2 = entry->other;
+          results[idx].count = entry->count;
           ++idx;
         }
       }

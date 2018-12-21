@@ -39,6 +39,7 @@ void co_occur_free(struct co_occur* c);
 struct co_occur_pair {
   int word1;
   int word2;
+  float count;
 };
 
 struct co_occur_pairs {
