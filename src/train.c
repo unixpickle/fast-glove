@@ -7,7 +7,7 @@
 
 static float _count_weight(float count) {
   if (count > COUNT_MAX) {
-    return count;
+    return 1.0;
   }
   return powf(count / COUNT_MAX, 3.0 / 4.0);
 }
