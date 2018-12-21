@@ -17,7 +17,8 @@ static int save(struct matrix* words, const char* output_path);
 
 int main(int argc, const char** argv) {
   if (argc != 4) {
-    fprintf(stderr, "Usage: %s <f> <num_epochs> <output_file>\n", argv[0]);
+    fprintf(stderr, "Usage: %s <co_occur_file> <num_epochs> <output_file>\n",
+            argv[0]);
     return 1;
   }
 
