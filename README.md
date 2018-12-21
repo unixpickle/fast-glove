@@ -24,6 +24,9 @@ Next, generate a co-occurrence matrix. This can take anywhere from 2-30 minutes 
 
 ```
 $ cat /path/to/corpus | ./build/build_co words.txt 10 /path/to/co_occur
+Building co-occurrence matrix...                  
+Enumerating co-occurrences...                     
+Got 233797151 pairs.
 ```
 
 In the above example, I use a window size of `10` and save the resulting co-occurrence matrix to `/path/to/co_occur`.
@@ -32,6 +35,13 @@ Next, we can train the embedding itself. Here's an example of how to do so:
 
 ```
 $ ./build/train_embed /path/to/co_occur 10 /path/to/embeddings
+Reading co-occurrences...                                       
+Training with 300001 words...     
+step 10000000: loss=0.590717         
+step 20000000: loss=0.415965                                                                        
+step 30000000: loss=0.350964                                                                        
+step 40000000: loss=0.314993
+...
 ```
 
 This example runs 10 epochs of training and saves the resulting embeddings to `/path/to/embeddings`. This will take anywhere from 10 minutes to a few hours, depending on how many co-occurrences you have and how many epochs you use. With 127M co-occurrences, I've done successful training runs in <20 minutes.
