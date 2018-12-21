@@ -21,7 +21,7 @@ static float _dot(float* x, float* y, int n) {
 }
 
 static double _trainer_train_iter(struct trainer* t) {
-  uint32_t pair_idx = arc4random_uniform((uint32_t)t->pairs->num_pairs);
+  int pair_idx = random() % t->pairs->num_pairs;
   struct co_occur_pair* pair = &t->pairs->pairs[pair_idx];
 
   // No risk of deadlock because the order is consistent.
@@ -31,7 +31,7 @@ static double _trainer_train_iter(struct trainer* t) {
   // Randomize which matrix we use for each word.
   int word = pair->word1;
   int ctx = pair->word2;
-  if (arc4random() & 1) {
+  if (random() & 1) {
     word = pair->word2;
     ctx = pair->word1;
   }

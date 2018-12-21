@@ -57,7 +57,7 @@ int matrix_write(struct matrix* m, FILE* f) {
 
 void matrix_randomize(struct matrix* m) {
   for (int i = 0; i < m->rows * m->cols; ++i) {
-    m->data[i] = (float)arc4random() / (float)0x80000000 - 1.0;
+    m->data[i] = (float)random() / (float)0x40000000 - 1.0;
   }
 }
 
