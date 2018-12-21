@@ -160,7 +160,7 @@ struct co_occur_pairs* co_occur_pairs_new(struct co_occur* c) {
       struct co_occur_bin* bin = &row->bins[j];
       for (int k = 0; k < bin->num_entries; ++k) {
         struct co_occur_entry* entry = &bin->entries[k];
-        if (entry->other) {
+        if (entry->count) {
           ++num_entries;
         }
       }
@@ -179,7 +179,7 @@ struct co_occur_pairs* co_occur_pairs_new(struct co_occur* c) {
       struct co_occur_bin* bin = &row->bins[j];
       for (int k = 0; k < bin->num_entries; ++k) {
         struct co_occur_entry* entry = &bin->entries[k];
-        if (entry->other) {
+        if (entry->count) {
           results[idx].word1 = i;
           results[idx].word2 = entry->other;
           results[idx].count = entry->count;
