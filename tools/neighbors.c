@@ -45,7 +45,7 @@ int main(int argc, const char** argv) {
   float best_corr = 2.0;
   for (int i = 0; i < 10; ++i) {
     int match = next_match(matrix, &best_corr, word_index);
-    printf("%d %s (%f)\n", match, word_list_lookup(words, match), *best_corr);
+    printf("%d %s (%f)\n", match, word_list_lookup(words, match), best_corr);
   }
 
   matrix_free(matrix);
