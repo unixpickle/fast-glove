@@ -1,6 +1,5 @@
 #include "matrix.h"
 #include <assert.h>
-#include <math.h>
 #include <stdlib.h>
 #include <strings.h>
 #include <unistd.h>
@@ -57,9 +56,8 @@ int matrix_write(struct matrix* m, FILE* f) {
 }
 
 void matrix_randomize(struct matrix* m) {
-  float scale = 1.0f / sqrtf((float)m->cols);
   for (int i = 0; i < m->rows * m->cols; ++i) {
-    m->data[i] = scale * (float)random() / (float)0x40000000 - 1.0;
+    m->data[i] = (float)random() / (float)0x40000000 - 1.0;
   }
 }
 
