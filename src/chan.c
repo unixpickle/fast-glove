@@ -37,7 +37,11 @@ void chan_send(struct chan* c, void* value) {
     }
     pthread_mutex_unlock(&c->lock);
     if (!sent_value) {
+#ifdef pthread_yield_np
       pthread_yield_np();
+#else
+      pthread_yield();
+#endif
     }
   }
 }
@@ -59,7 +63,11 @@ void* chan_recv(struct chan* c) {
     }
     pthread_mutex_unlock(&c->lock);
     if (!has_result) {
+#ifdef pthread_yield_np
       pthread_yield_np();
+#else
+      pthread_yield();
+#endif
     }
   }
   return result;
