@@ -1,4 +1,4 @@
-CFLAGS=-Isrc -Wall -lpthread -lmath
+CFLAGS=-Isrc -Wall -lpthread -lm
 
 all: build/test_word_list build/test_co_occur build/test_hash_map build/word_dump build/csv_to_docs build/build_co
 
