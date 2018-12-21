@@ -9,7 +9,7 @@
 #define NUM_THREADS 8
 #define NUM_DIMS 64
 #define STEP_SIZE 0.01
-#define ROUND_STEPS 1000000
+#define ROUND_STEPS 10000000
 
 static struct co_occur_pairs* read_pairs(const char* path);
 static int count_words(struct co_occur_pairs* pairs);
