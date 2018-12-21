@@ -39,7 +39,7 @@ This example runs 10 epochs of training and saves the resulting embeddings to `/
 Finally, you can perform analysis using the embeddings. For example, here is how to find the neighbors of the word "iphone":
 
 ```
-$ ./build/neighbors words.txt embed iphone
+$ ./build/neighbors words.txt /path/to/embeddings iphone
 neighbors for word id: 1056                   
 970 apple (0.636739)                                        
 1610 android (0.613653)             
