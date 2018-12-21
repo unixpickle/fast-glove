@@ -8,7 +8,8 @@
 struct co_occur* build_co_occur(struct inv_word_list* list,
                                 FILE* documents,
                                 int window,
-                                size_t max_size);
+                                size_t max_size,
+                                int num_threads);
 
 struct word_list* build_word_list(FILE* documents, int max_words);
 

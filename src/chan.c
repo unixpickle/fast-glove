@@ -1,4 +1,6 @@
 #include "chan.h"
+#include <assert.h>
+#include <stdlib.h>
 
 struct chan* chan_new(int capacity) {
   struct chan* c = malloc(sizeof(struct chan));
