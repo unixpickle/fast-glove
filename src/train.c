@@ -26,7 +26,9 @@ static double _trainer_train_iter(struct trainer* t) {
 
   // No risk of deadlock because the order is consistent.
   matrix_locks_lock(t->_locks, pair->word1);
-  matrix_locks_lock(t->_locks, pair->word2);
+  if (pair->word2 != pair->word1) {
+    matrix_locks_lock(t->_locks, pair->word2);
+  }
 
   // Randomize which matrix we use for each word.
   int word = pair->word1;
@@ -70,7 +72,9 @@ static double _trainer_train_iter(struct trainer* t) {
   }
 
   matrix_locks_unlock(t->_locks, pair->word2);
-  matrix_locks_unlock(t->_locks, pair->word1);
+  if (pair->word1 != pair->word2) {
+    matrix_locks_unlock(t->_locks, pair->word1);
+  }
 
   return powf(diff, 2.0);
 }
