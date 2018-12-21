@@ -2,6 +2,7 @@
 #define __CO_OCCUR_H__
 
 #include <stddef.h>
+#include <stdio.h>
 
 struct co_occur_entry {
   int other;
@@ -45,6 +46,8 @@ struct co_occur_pairs {
 };
 
 struct co_occur_pairs* co_occur_pairs_new(struct co_occur* c);
+struct co_occur_pairs* co_occur_pairs_read(FILE* f);
+int co_occur_pairs_write(struct co_occur_pairs* p, FILE* f);
 void co_occur_pairs_free(struct co_occur_pairs* p);
 
 #endif

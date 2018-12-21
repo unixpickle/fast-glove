@@ -1,6 +1,6 @@
 CFLAGS=-Isrc -Wall -lpthread
 
-all: build/test_word_list build/test_co_occur build/test_hash_map build/word_dump build/csv_to_docs build/co_stats
+all: build/test_word_list build/test_co_occur build/test_hash_map build/word_dump build/csv_to_docs build/build_co
 
 build/test_word_list: src/word_list.c test/test_word_list.c
 	mkdir -p build
@@ -22,7 +22,7 @@ build/csv_to_docs: tools/csv_to_docs.go
 	mkdir -p build
 	go build -o build/csv_to_docs tools/csv_to_docs.go
 
-build/co_stats: src/*.c tools/co_stats.c
+build/build_co: src/*.c tools/build_co.c
 	mkdir -p build
 	gcc -o $@ $^ -O3 $(CFLAGS)
 

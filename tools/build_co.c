@@ -6,13 +6,15 @@
 #define NUM_THREADS 4
 
 int main(int argc, const char** argv) {
-  if (argc != 3) {
-    fprintf(stderr, "Usage: %s <word_file> <window_size>\n", argv[0]);
+  if (argc != 4) {
+    fprintf(stderr, "Usage: %s <word_file> <window_size> <output_file>\n",
+            argv[0]);
     return 1;
   }
 
   const char* words_path = argv[1];
   int window_size = atoi(argv[2]);
+  const char* output_path = argv[3];
 
   struct word_list* words = word_list_new();
   if (!words) {
@@ -61,6 +63,18 @@ int main(int argc, const char** argv) {
   }
 
   printf("Got %lld pairs.\n", (long long)pairs->num_pairs);
-
+  FILE* output = fopen(output_path, "w+");
+  if (!output) {
+    fprintf(stderr, "failed to open output file.\n");
+    co_occur_pairs_free(pairs);
+    return 1;
+  }
+  res = co_occur_pairs_write(pairs, output);
+  fclose(output);
   co_occur_pairs_free(pairs);
+  if (!res) {
+    fprintf(stderr, "failed to write pairs.\n");
+    return 1;
+  }
+  return 0;
 }

@@ -174,6 +174,34 @@ struct co_occur_pairs* co_occur_pairs_new(struct co_occur* c) {
   return result;
 }
 
+struct co_occur_pairs* co_occur_pairs_read(FILE* f) {
+  fseek(f, 0, SEEK_END);
+  size_t size = (size_t)ftello(f);
+  size_t num_pairs = size / sizeof(struct co_occur_pair);
+  rewind(f);
+
+  struct co_occur_pair* buf = malloc(sizeof(struct co_occur_pair) * num_pairs);
+  size_t res = fread(buf, sizeof(struct co_occur_pair), num_pairs, f);
+  if (res != num_pairs) {
+    free(buf);
+    return NULL;
+  }
+
+  struct co_occur_pairs* pairs = malloc(sizeof(struct co_occur_pairs));
+  if (!pairs) {
+    free(buf);
+    return NULL;
+  }
+  pairs->pairs = buf;
+  pairs->num_pairs = num_pairs;
+  return pairs;
+}
+
+int co_occur_pairs_write(struct co_occur_pairs* p, FILE* f) {
+  size_t res = fwrite(p->pairs, sizeof(struct co_occur_pair), p->num_pairs, f);
+  return res == p->num_pairs;
+}
+
 void co_occur_pairs_free(struct co_occur_pairs* p) {
   free(p->pairs);
   free(p);
