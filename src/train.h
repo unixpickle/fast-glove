@@ -1,3 +1,7 @@
+// Core embedding training API. This is intended to be
+// used by creating a struct trainer and calling
+// trainer_train() repeatedly.
+
 #ifndef __TRAIN_H__
 #define __TRAIN_H__
 

@@ -1,3 +1,8 @@
+// Build a co-occurrence matrix.
+//
+// Reads the corpus from stdin and dumps the resulting
+// matrix to a file.
+
 #include <stdio.h>
 #include <stdlib.h>
 #include "build.h"

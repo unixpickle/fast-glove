@@ -1,3 +1,5 @@
+// Data-structures for manipulating 2-D arrays of floats.
+
 #ifndef __MATRIX_H__
 #define __MATRIX_H__
 

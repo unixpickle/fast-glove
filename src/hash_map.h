@@ -1,3 +1,9 @@
+// This is a hash-map structure used to count words in a
+// corpus. It uses a very primitive hash function, and
+// maps words to their counts. Since it is intended to be
+// used to count words, it can easily be converted to a
+// struct word_list containing the most frequent words.
+
 #ifndef __HASH_MAP_H__
 #define __HASH_MAP_H__
 

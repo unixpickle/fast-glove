@@ -1,3 +1,13 @@
+// Representations of lists of words.
+// This defines two complementary representations.
+//
+// The first representation, struct word_list, maps IDs to
+// their corresponding words.
+//
+// The other representation, struct inv_word_list, maps
+// words to their corresponding IDs. It is useful when
+// processing a corpus and converting words to IDs.
+
 #ifndef __WORD_LIST_H__
 #define __WORD_LIST_H__
 

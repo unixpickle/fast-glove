@@ -1,3 +1,15 @@
+// Structures for storing a co-occurrence matrix. There
+// are two representations for the CO matrix.
+//
+// The first representation is struct co_occur. It is easy
+// to mutate, but hard to serialize or sample from. It
+// uses a very primitive hashmap to make updates fast.
+//
+// The other representation is struct co_occur_pairs,
+// which represents the matrix as a flat list of entries.
+// This structure is easier to serialize and sample from,
+// but cannot be modified easily.
+
 #ifndef __CO_OCCUR_H__
 #define __CO_OCCUR_H__
 

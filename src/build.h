@@ -1,3 +1,7 @@
+// Generic helpers for building up data structures from a
+// corpus. In particular, helpers for building the CO
+// matrix and the word list.
+
 #ifndef __FASTGLOVE_BUILD_H__
 #define __FASTGLOVE_BUILD_H__
 

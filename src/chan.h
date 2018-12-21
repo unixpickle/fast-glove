@@ -1,3 +1,6 @@
+// A general concurrent communications channel primitive.
+// Only intended for use in compute-intensive loads.
+
 #ifndef __CHAN_H__
 #define __CHAN_H__
 
