@@ -1,6 +1,7 @@
 #ifndef __CO_OCCUR_H__
 #define __CO_OCCUR_H__
 
+#include <pthread.h>
 #include <stddef.h>
 #include <stdio.h>
 
@@ -16,6 +17,7 @@ struct co_occur_bin {
 };
 
 struct co_occur_row {
+  pthread_mutex_t lock;
   struct co_occur_bin* bins;
   int num_bins;
 };
@@ -26,7 +28,6 @@ struct co_occur {
 };
 
 struct co_occur* co_occur_new(int num_rows);
-struct co_occur_entry* co_occur_entry(struct co_occur* c, int word1, int word2);
 int co_occur_add(struct co_occur* c, int word1, int word2);
 int co_occur_get(struct co_occur* c, int word1, int word2);
 int co_occur_add_document(struct co_occur* c,

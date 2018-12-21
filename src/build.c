@@ -15,7 +15,6 @@ struct co_build_ctx {
   struct inv_word_list* list;
   int window;
   struct chan* documents;
-  pthread_mutex_t co_lock;
   struct co_occur* co;
 };
 
@@ -48,9 +47,7 @@ static void* _build_co_occur_worker(void* raw_ctx) {
     }
 
     int num_words = _doc_to_words(ctx->list, doc, words);
-    pthread_mutex_lock(&ctx->co_lock);
     co_occur_add_document(ctx->co, words, num_words, ctx->window);
-    pthread_mutex_unlock(&ctx->co_lock);
     free(doc);
     free(words);
   }
@@ -65,12 +62,9 @@ struct co_occur* build_co_occur(struct inv_word_list* list,
   ctx.list = list;
   ctx.window = window;
 
-  if (pthread_mutex_init(&ctx.co_lock, NULL)) {
-    return NULL;
-  }
   ctx.documents = chan_new(num_threads);
   if (!ctx.documents) {
-    goto fail_mutex;
+    return NULL;
   }
 
   ctx.co = co_occur_new(list->num_words + 1);
@@ -123,7 +117,6 @@ struct co_occur* build_co_occur(struct inv_word_list* list,
   }
   free(threads);
   chan_free(ctx.documents);
-  pthread_mutex_destroy(&ctx.co_lock);
 
   return ctx.co;
 
@@ -139,8 +132,6 @@ fail_co:
   co_occur_free(ctx.co);
 fail_documents:
   chan_free(ctx.documents);
-fail_mutex:
-  pthread_mutex_destroy(&ctx.co_lock);
   return NULL;
 }
 

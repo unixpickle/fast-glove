@@ -35,9 +35,13 @@ static struct co_occur_entry* _co_occur_bin_entry(struct co_occur_bin* bin,
 }
 
 static int _co_occur_row_init(struct co_occur_row* row, int num_bins) {
+  if (pthread_mutex_init(&row->lock, NULL)) {
+    return 0;
+  }
   row->num_bins = num_bins;
   row->bins = malloc(sizeof(struct co_occur_bin) * num_bins);
   if (!row->bins) {
+    pthread_mutex_destroy(&row->lock);
     return 0;
   }
   bzero(row->bins, sizeof(struct co_occur_bin) * num_bins);
@@ -51,6 +55,7 @@ static void _co_occur_row_destroy(struct co_occur_row* row) {
     }
   }
   free(row->bins);
+  pthread_mutex_destroy(&row->lock);
 }
 
 static struct co_occur_entry* _co_occur_row_entry(struct co_occur_row* row,
@@ -81,30 +86,48 @@ struct co_occur* co_occur_new(int num_rows) {
   return result;
 }
 
-struct co_occur_entry* co_occur_entry(struct co_occur* c,
-                                      int word1,
-                                      int word2) {
+static struct co_occur_entry* _co_occur_entry(struct co_occur* c,
+                                              int word1,
+                                              int word2) {
   if (word1 > word2) {
-    return co_occur_entry(c, word2, word1);
+    return _co_occur_entry(c, word2, word1);
   }
-  return _co_occur_row_entry(&c->rows[word1], word2);
+  struct co_occur_row* row = &c->rows[word1];
+  pthread_mutex_lock(&row->lock);
+  struct co_occur_entry* res = _co_occur_row_entry(row, word2);
+  if (!res) {
+    pthread_mutex_unlock(&row->lock);
+  }
+  return res;
+}
+
+static void _co_occur_entry_unlock(struct co_occur* c, int word1, int word2) {
+  if (word1 > word2) {
+    _co_occur_entry_unlock(c, word2, word1);
+  } else {
+    struct co_occur_row* row = &c->rows[word1];
+    pthread_mutex_unlock(&row->lock);
+  }
 }
 
 int co_occur_add(struct co_occur* c, int word1, int word2) {
-  struct co_occur_entry* entry = co_occur_entry(c, word1, word2);
+  struct co_occur_entry* entry = _co_occur_entry(c, word1, word2);
   if (!entry) {
     return 0;
   }
   ++entry->count;
+  _co_occur_entry_unlock(c, word1, word2);
   return 1;
 }
 
 int co_occur_get(struct co_occur* c, int word1, int word2) {
-  struct co_occur_entry* entry = co_occur_entry(c, word1, word2);
+  struct co_occur_entry* entry = _co_occur_entry(c, word1, word2);
   if (!entry) {
     return 0;
   }
-  return entry->count;
+  int res = entry->count;
+  _co_occur_entry_unlock(c, word1, word2);
+  return res;
 }
 
 int co_occur_add_document(struct co_occur* c,
