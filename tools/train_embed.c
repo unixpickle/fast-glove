@@ -6,7 +6,7 @@
 #include "co_occur.h"
 #include "train.h"
 
-#define NUM_THREADS 4
+#define NUM_THREADS 8
 #define NUM_DIMS 64
 #define STEP_SIZE 0.01
 #define ROUND_STEPS 1000000
