@@ -144,15 +144,7 @@ int co_occur_add_document(struct co_occur* c,
   return 1;
 }
 
-void co_occur_free(struct co_occur* c) {
-  for (int i = 0; i < c->num_rows; ++i) {
-    _co_occur_row_destroy(&c->rows[i]);
-  }
-  free(c->rows);
-  free(c);
-}
-
-struct co_occur_pairs* co_occur_pairs_new(struct co_occur* c) {
+size_t co_occur_count(struct co_occur* c) {
   size_t num_entries = 0;
   for (int i = 0; i < c->num_rows; ++i) {
     struct co_occur_row* row = &c->rows[i];
@@ -166,7 +158,42 @@ struct co_occur_pairs* co_occur_pairs_new(struct co_occur* c) {
       }
     }
   }
+  return num_entries;
+}
 
+int co_occur_write(struct co_occur* c, FILE* f) {
+  for (int i = 0; i < c->num_rows; ++i) {
+    struct co_occur_row* row = &c->rows[i];
+    for (int j = 0; j < row->num_bins; ++j) {
+      struct co_occur_bin* bin = &row->bins[j];
+      for (int k = 0; k < bin->num_entries; ++k) {
+        struct co_occur_entry* entry = &bin->entries[k];
+        if (entry->count) {
+          struct co_occur_pair pair;
+          pair.word1 = i;
+          pair.word2 = entry->other;
+          pair.count = entry->count;
+          if (fwrite(&pair, 1, sizeof(struct co_occur_pair), f) !=
+              sizeof(struct co_occur_pair)) {
+            return 0;
+          }
+        }
+      }
+    }
+  }
+  return 1;
+}
+
+void co_occur_free(struct co_occur* c) {
+  for (int i = 0; i < c->num_rows; ++i) {
+    _co_occur_row_destroy(&c->rows[i]);
+  }
+  free(c->rows);
+  free(c);
+}
+
+struct co_occur_pairs* co_occur_pairs_new(struct co_occur* c) {
+  size_t num_entries = co_occur_count(c);
   size_t idx = 0;
   struct co_occur_pair* results =
       malloc(sizeof(struct co_occur_pair) * num_entries);

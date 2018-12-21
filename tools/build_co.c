@@ -59,24 +59,17 @@ int main(int argc, const char** argv) {
     return 1;
   }
 
-  printf("Enumerating co-occurrences...\n");
-  struct co_occur_pairs* pairs = co_occur_pairs_new(co);
-  co_occur_free(co);
-  if (!pairs) {
-    fprintf(stderr, "failed to create pairs.\n");
-    return 1;
-  }
+  printf("Got %lld pairs.\n", (long long)co_occur_count(co));
 
-  printf("Got %lld pairs.\n", (long long)pairs->num_pairs);
   FILE* output = fopen(output_path, "w+");
   if (!output) {
     fprintf(stderr, "failed to open output file.\n");
-    co_occur_pairs_free(pairs);
+    co_occur_free(co);
     return 1;
   }
-  res = co_occur_pairs_write(pairs, output);
+  res = co_occur_write(co, output);
   fclose(output);
-  co_occur_pairs_free(pairs);
+  co_occur_free(co);
   if (!res) {
     fprintf(stderr, "failed to write pairs.\n");
     return 1;

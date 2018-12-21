@@ -46,6 +46,8 @@ int co_occur_add_document(struct co_occur* c,
                           int* words,
                           int num_words,
                           int window);
+size_t co_occur_count(struct co_occur* c);
+int co_occur_write(struct co_occur* c, FILE* f);
 void co_occur_free(struct co_occur* c);
 
 struct co_occur_pair {
