@@ -1,6 +1,6 @@
 CFLAGS=-Isrc -Wall -lpthread -lm
 
-all: build/test_word_list build/test_co_occur build/test_hash_map build/word_dump build/csv_to_docs build/build_co build/train_embed
+all: build/test_word_list build/test_co_occur build/test_hash_map build/word_dump build/csv_to_docs build/build_co build/train_embed build/neighbors
 
 build/test_word_list: src/word_list.c test/test_word_list.c
 	mkdir -p build
@@ -27,6 +27,10 @@ build/build_co: src/*.c tools/build_co.c
 	gcc -o $@ $^ -O3 $(CFLAGS)
 
 build/train_embed: src/*.c tools/train_embed.c
+	mkdir -p build
+	gcc -o $@ $^ -O3 $(CFLAGS)
+
+build/neighbors: src/*.c tools/neighbors.c
 	mkdir -p build
 	gcc -o $@ $^ -O3 $(CFLAGS)
 
