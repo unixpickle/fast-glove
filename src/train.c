@@ -76,7 +76,7 @@ static double _trainer_train_iter(struct trainer* t) {
     matrix_locks_unlock(t->_locks, pair->word1);
   }
 
-  return powf(diff, 2.0);
+  return weight * powf(diff, 2.0);
 }
 
 static void* _trainer_train_thread(void* raw_trainer) {
