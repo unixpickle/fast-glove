@@ -1,6 +1,6 @@
 CFLAGS=-Isrc -Wall
 
-all: build/test_word_list build/test_co_occur build/test_hash_map build/word_dump build/csv_to_docs
+all: build/test_word_list build/test_co_occur build/test_hash_map build/word_dump build/csv_to_docs build/co_stats
 
 build/test_word_list: src/word_list.c test/test_word_list.c
 	mkdir -p build
@@ -21,6 +21,10 @@ build/word_dump: src/*.c tools/word_dump.c
 build/csv_to_docs: tools/csv_to_docs.go
 	mkdir -p build
 	go build -o build/csv_to_docs tools/csv_to_docs.go
+
+build/co_stats: src/*.c tools/co_stats.c
+	mkdir -p build
+	gcc -o $@ $^ -O3 $(CFLAGS)
 
 clean:
 	rm -rf build

@@ -29,6 +29,23 @@ void word_list_free(struct word_list* list) {
   free(list);
 }
 
+int word_list_read(struct word_list* list, FILE* f) {
+  char buf[WORD_MAX_LENGTH + 1];
+  while (fgets(buf, sizeof(buf), f)) {
+    if (buf[strlen(buf) - 1] == '\n') {
+      buf[strlen(buf) - 1] = 0;
+    }
+    if (!word_list_add(list, buf)) {
+      return 0;
+    }
+  }
+  if (feof(f)) {
+    return 1;
+  } else {
+    return 0;
+  }
+}
+
 int word_list_add(struct word_list* list, const char* word) {
   if (list->capacity == list->num_words) {
     struct word* words =

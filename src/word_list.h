@@ -1,6 +1,8 @@
 #ifndef __WORD_LIST_H__
 #define __WORD_LIST_H__
 
+#include <stdio.h>
+
 #define WORD_MAX_LENGTH 28
 
 struct word {
@@ -15,6 +17,7 @@ struct word_list {
 
 struct word_list* word_list_new();
 void word_list_free(struct word_list* list);
+int word_list_read(struct word_list* list, FILE* f);
 int word_list_add(struct word_list* list, const char* word);
 const char* word_list_lookup(struct word_list* list, int id);
 
