@@ -6,10 +6,10 @@
 #include "chan.h"
 #include "hash_map.h"
 
-#define DELIMITERS " \t\n,\"'.!;"
+#define DELIMITERS " \t\n,\"'.!;()/"
 #define IS_DELIMITER(c)                                                       \
   (c == ' ' || c == '\t' || c == '\n' || c == ',' || c == '"' || c == '\'' || \
-   c == '.' || c == '!' || c == ';')
+   c == '.' || c == '!' || c == ';' || c == '(' || c == ')' || c == '/')
 
 struct co_build_ctx {
   struct inv_word_list* list;
