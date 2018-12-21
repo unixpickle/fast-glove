@@ -8,7 +8,7 @@
 
 #define NUM_THREADS 8
 #define NUM_DIMS 64
-#define STEP_SIZE 0.01
+#define STEP_SIZE 0.05
 #define ROUND_STEPS 10000000
 
 static struct co_occur_pairs* read_pairs(const char* path);
