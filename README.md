@@ -1,16 +1,16 @@
 # fast-glove
 
-This is meant to be a super duper optimized implementation of GloVe word embeddings.
+This is a clean & fast implementation of [GloVe](https://nlp.stanford.edu/projects/glove/). It can be used to generate word embeddings from arbitrary corpora.
 
 # Usage
 
-First, install Go, a C compiler, and `make`. Then compile the code by running this command in the root repository directory:
+First, install Go, a C compiler, and `make`. Then compile the code by running this command in the root of the repository:
 
 ```
 $ make
 ```
 
-Next, create a single file with every document separated by a NUL byte. The tool `./build/csv_to_docs` converts a CSV file to this NUL-separated format, assuming that the documents are stored in the last comma-separated column. Let's call this file `/path/to/corpus`.
+Next, create a single file containing the entire corpus. Let's call this file `/path/to/corpus`. In this file, each document should be separated by a NUL byte. The tool `./build/csv_to_docs` converts a CSV file to this NUL-separated format, assuming that each document is stored in the last column.
 
 Next, generate a word list. You can do this using the `./build/word_dump` tool like so:
 
@@ -26,15 +26,15 @@ Next, generate a co-occurrence matrix. This can take anywhere from 2-30 minutes 
 $ cat /path/to/corpus | ./build/build_co words.txt 10 /path/to/co_occur
 ```
 
-This will use a window size of `10` and save the resulting co-occurrence matrix to `/path/to/co_occur`.
+In the above example, I use a window size of `10` and save the resulting co-occurrence matrix to `/path/to/co_occur`.
 
-Next, we can train the embedding itself. Here's an example of how to do that:
+Next, we can train the embedding itself. Here's an example of how to do so:
 
 ```
 $ ./build/train_embed /path/to/co_occur 10 /path/to/embeddings
 ```
 
-This runs 10 epochs of training and saves the resulting embeddings to `/path/to/embeddings`. This will take anywhere from 10 minutes to a few hours, depending on how many co-occurrences you have and how many epochs you use. With 127M co-occurrences, I've done successful training runs in <20 minutes.
+This example runs 10 epochs of training and saves the resulting embeddings to `/path/to/embeddings`. This will take anywhere from 10 minutes to a few hours, depending on how many co-occurrences you have and how many epochs you use. With 127M co-occurrences, I've done successful training runs in <20 minutes.
 
 Finally, you can perform analysis using the embeddings. For example, here is how to find the neighbors of the word "iphone":
 
