@@ -1,9 +1,9 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include "build.h"
+#include "threads.h"
 
 #define MAX_DOC_SIZE 1024
-#define NUM_THREADS 4
 
 int main(int argc, const char** argv) {
   if (argc != 4) {
@@ -46,8 +46,8 @@ int main(int argc, const char** argv) {
   }
 
   printf("Building co-occurrence matrix...\n");
-  struct co_occur* co =
-      build_co_occur(inv, stdin, window_size, MAX_DOC_SIZE, NUM_THREADS);
+  struct co_occur* co = build_co_occur(inv, stdin, window_size, MAX_DOC_SIZE,
+                                       default_num_threads());
   inv_word_list_free(inv);
   if (!co) {
     fprintf(stderr, "failed to create matrix.\n");

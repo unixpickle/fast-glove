@@ -4,9 +4,9 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include "co_occur.h"
+#include "threads.h"
 #include "train.h"
 
-#define NUM_THREADS 8
 #define NUM_DIMS 64
 #define STEP_SIZE 0.05
 #define ROUND_STEPS 10000000
@@ -47,7 +47,7 @@ int main(int argc, const char** argv) {
   while (total_iters < (unsigned long long)num_epochs *
                            (unsigned long long)pairs->num_pairs) {
     float loss = 0.0;
-    int res = trainer_train(trainer, ROUND_STEPS, NUM_THREADS, &loss);
+    int res = trainer_train(trainer, ROUND_STEPS, default_num_threads(), &loss);
     if (!res) {
       fprintf(stderr, "training round failed.\n");
       trainer_free(trainer);
