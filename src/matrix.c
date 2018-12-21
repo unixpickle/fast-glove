@@ -61,6 +61,12 @@ void matrix_randomize(struct matrix* m) {
   }
 }
 
+void matrix_reset(struct matrix* m) {
+  for (int i = 0; i < m->rows * m->cols; ++i) {
+    m->data[i] = 0.0;
+  }
+}
+
 float* matrix_row(struct matrix* m, int row) {
   assert(row >= 0 && row < m->rows);
   return m->data + (row * m->cols);

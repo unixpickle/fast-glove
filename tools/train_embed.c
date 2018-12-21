@@ -1,6 +1,7 @@
 // Train embeddings using an existing co-occurrence matrix
 // and word list.
 
+#include <math.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include "co_occur.h"
@@ -53,6 +54,12 @@ int main(int argc, const char** argv) {
       trainer_free(trainer);
       co_occur_pairs_free(pairs);
       return 1;
+    }
+    if (isnan(loss)) {
+      printf("Got NaN. Restarting...\n");
+      total_iters = 0;
+      trainer_reset(trainer);
+      continue;
     }
     total_iters += ROUND_STEPS;
     printf("step %lld: loss=%f\n", total_iters, loss);

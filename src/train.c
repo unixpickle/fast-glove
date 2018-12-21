@@ -183,6 +183,17 @@ int trainer_train(struct trainer* t,
   return 1;
 }
 
+void trainer_reset(struct trainer* t) {
+  struct matrix* mats[8] = {
+      t->word_vecs,   t->ctx_vecs,   t->ada_word_vecs,   t->ada_ctx_vecs,
+      t->word_biases, t->ctx_biases, t->ada_word_biases, t->ada_ctx_biases};
+  for (int i = 0; i < 8; ++i) {
+    matrix_reset(mats[i]);
+  }
+  matrix_randomize(t->word_vecs);
+  matrix_randomize(t->ctx_vecs);
+}
+
 void trainer_free(struct trainer* t) {
   if (t->_locks) {
     matrix_locks_free(t->_locks);

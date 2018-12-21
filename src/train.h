@@ -37,6 +37,7 @@ int trainer_train(struct trainer* t,
                   long num_iters,
                   int num_threads,
                   float* loss_out);
+void trainer_reset(struct trainer* t);
 void trainer_free(struct trainer* t);
 
 #endif
