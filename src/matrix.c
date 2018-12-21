@@ -70,3 +70,45 @@ void matrix_free(struct matrix* m) {
   free(m->data);
   free(m);
 }
+
+struct matrix_locks* matrix_locks_new(int num_rows) {
+  struct matrix_locks* res = malloc(sizeof(struct matrix_locks));
+  if (!res) {
+    return NULL;
+  }
+  res->num_rows = num_rows;
+  res->locks = malloc(sizeof(pthread_mutex_t) * num_rows);
+  if (!res->locks) {
+    free(res);
+    return NULL;
+  }
+  for (int i = 0; i < num_rows; ++i) {
+    if (pthread_mutex_init(&res->locks[i], NULL)) {
+      for (int j = 0; j < i; ++j) {
+        pthread_mutex_destroy(&res->locks[j]);
+      }
+      free(res->locks);
+      free(res);
+      return NULL;
+    }
+  }
+  return res;
+}
+
+void matrix_locks_lock(struct matrix_locks* m, int row) {
+  assert(row >= 0 && row < m->num_rows);
+  pthread_mutex_lock(&m->locks[row]);
+}
+
+void matrix_locks_unlock(struct matrix_locks* m, int row) {
+  assert(row >= 0 && row < m->num_rows);
+  pthread_mutex_unlock(&m->locks[row]);
+}
+
+void matrix_locks_free(struct matrix_locks* m) {
+  for (int i = 0; i < m->num_rows; ++i) {
+    pthread_mutex_destroy(&m->locks[i]);
+  }
+  free(m->locks);
+  free(m);
+}

@@ -1,6 +1,7 @@
 #ifndef __MATRIX_H__
 #define __MATRIX_H__
 
+#include <pthread.h>
 #include <stdio.h>
 
 struct matrix {
@@ -15,5 +16,15 @@ int matrix_write(struct matrix* m, FILE* f);
 void matrix_randomize(struct matrix* m);
 float* matrix_row(struct matrix* m, int row);
 void matrix_free(struct matrix* m);
+
+struct matrix_locks {
+  pthread_mutex_t* locks;
+  int num_rows;
+};
+
+struct matrix_locks* matrix_locks_new(int num_rows);
+void matrix_locks_lock(struct matrix_locks* m, int row);
+void matrix_locks_unlock(struct matrix_locks* m, int row);
+void matrix_locks_free(struct matrix_locks* m);
 
 #endif
