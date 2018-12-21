@@ -62,7 +62,7 @@ static double _trainer_train_iter(struct trainer* t) {
   *word_bias -= t->step_size * upstream_grad / sqrtf(*ada_word_bias);
   *ctx_bias -= t->step_size * upstream_grad / sqrtf(*ada_ctx_bias);
 
-  for (int i = 0; i < t->word_vecs->rows; ++i) {
+  for (int i = 0; i < t->word_vecs->cols; ++i) {
     float word_grad = upstream_grad * ctx_vec[i];
     float ctx_grad = upstream_grad * word_vec[i];
     ada_word_vec[i] += powf(word_grad, 2.0);
