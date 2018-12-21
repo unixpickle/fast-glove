@@ -110,22 +110,22 @@ static void _co_occur_entry_unlock(struct co_occur* c, int word1, int word2) {
   }
 }
 
-int co_occur_add(struct co_occur* c, int word1, int word2) {
+int co_occur_add(struct co_occur* c, int word1, int word2, float amount) {
   struct co_occur_entry* entry = _co_occur_entry(c, word1, word2);
   if (!entry) {
     return 0;
   }
-  ++entry->count;
+  entry->count += amount;
   _co_occur_entry_unlock(c, word1, word2);
   return 1;
 }
 
-int co_occur_get(struct co_occur* c, int word1, int word2) {
+float co_occur_get(struct co_occur* c, int word1, int word2) {
   struct co_occur_entry* entry = _co_occur_entry(c, word1, word2);
   if (!entry) {
     return 0;
   }
-  int res = entry->count;
+  float res = entry->count;
   _co_occur_entry_unlock(c, word1, word2);
   return res;
 }
@@ -136,7 +136,7 @@ int co_occur_add_document(struct co_occur* c,
                           int window) {
   for (int i = 0; i < num_words; ++i) {
     for (int j = i - 1; j >= 0 && j >= i - window; --j) {
-      if (!co_occur_add(c, words[i], words[j])) {
+      if (!co_occur_add(c, words[i], words[j], 1.0 / (float)(i - j))) {
         return 0;
       }
     }

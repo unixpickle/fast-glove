@@ -7,7 +7,7 @@
 
 struct co_occur_entry {
   int other;
-  int count;
+  float count;
 };
 
 struct co_occur_bin {
@@ -28,8 +28,8 @@ struct co_occur {
 };
 
 struct co_occur* co_occur_new(int num_rows);
-int co_occur_add(struct co_occur* c, int word1, int word2);
-int co_occur_get(struct co_occur* c, int word1, int word2);
+int co_occur_add(struct co_occur* c, int word1, int word2, float amount);
+float co_occur_get(struct co_occur* c, int word1, int word2);
 int co_occur_add_document(struct co_occur* c,
                           int* words,
                           int num_words,
