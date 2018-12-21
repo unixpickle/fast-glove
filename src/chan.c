@@ -1,5 +1,6 @@
 #include "chan.h"
 #include <assert.h>
+#include <sched.h>
 #include <stdlib.h>
 
 struct chan* chan_new(int capacity) {
@@ -37,11 +38,7 @@ void chan_send(struct chan* c, void* value) {
     }
     pthread_mutex_unlock(&c->lock);
     if (!sent_value) {
-#ifdef pthread_yield_np
-      pthread_yield_np();
-#else
-      pthread_yield();
-#endif
+      sched_yield();
     }
   }
 }
@@ -63,11 +60,7 @@ void* chan_recv(struct chan* c) {
     }
     pthread_mutex_unlock(&c->lock);
     if (!has_result) {
-#ifdef pthread_yield_np
-      pthread_yield_np();
-#else
-      pthread_yield();
-#endif
+      sched_yield();
     }
   }
   return result;
