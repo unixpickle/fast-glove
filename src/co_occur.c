@@ -253,6 +253,32 @@ int co_occur_pairs_write(struct co_occur_pairs* p, FILE* f) {
   return res == p->num_pairs;
 }
 
+struct co_occur* co_occur_pairs_pack(struct co_occur_pairs* p, int num_rows) {
+  struct co_occur* c = co_occur_new(num_rows);
+  if (!c) {
+    return NULL;
+  }
+  for (size_t i = 0; i < p->num_pairs; ++i) {
+    struct co_occur_pair* pair = &p->pairs[i];
+    if (!co_occur_add(c, pair->word1, pair->word2, pair->count)) {
+      co_occur_free(c);
+      return NULL;
+    }
+  }
+  return c;
+}
+
+int co_occur_pairs_num_rows(struct co_occur_pairs* p) {
+  int num_rows = 0;
+  for (size_t i = 0; i < p->num_pairs; ++i) {
+    int word = p->pairs[i].word2;
+    if (word >= num_rows) {
+      num_rows = word + 1;
+    }
+  }
+  return num_rows;
+}
+
 void co_occur_pairs_free(struct co_occur_pairs* p) {
   free(p->pairs);
   free(p);

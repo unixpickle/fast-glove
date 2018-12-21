@@ -13,7 +13,6 @@
 #define ROUND_STEPS 10000000
 
 static struct co_occur_pairs* read_pairs(const char* path);
-static int count_words(struct co_occur_pairs* pairs);
 static int save(struct matrix* words, const char* output_path);
 
 int main(int argc, const char** argv) {
@@ -34,7 +33,7 @@ int main(int argc, const char** argv) {
     return 1;
   }
 
-  int num_words = count_words(pairs);
+  int num_words = co_occur_pairs_num_rows(pairs);
   printf("Training with %d words...\n", num_words);
 
   struct trainer* trainer = trainer_new(STEP_SIZE, pairs, num_words, NUM_DIMS);
@@ -85,17 +84,6 @@ static struct co_occur_pairs* read_pairs(const char* path) {
   struct co_occur_pairs* pairs = co_occur_pairs_read(f);
   fclose(f);
   return pairs;
-}
-
-static int count_words(struct co_occur_pairs* pairs) {
-  int num_words = 0;
-  for (int i = 0; i < pairs->num_pairs; ++i) {
-    int word = pairs->pairs[i].word2;
-    if (word >= num_words) {
-      num_words = word + 1;
-    }
-  }
-  return num_words;
 }
 
 static int save(struct matrix* words, const char* output_path) {

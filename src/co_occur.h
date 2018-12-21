@@ -64,6 +64,8 @@ struct co_occur_pairs {
 struct co_occur_pairs* co_occur_pairs_new(struct co_occur* c);
 struct co_occur_pairs* co_occur_pairs_read(FILE* f);
 int co_occur_pairs_write(struct co_occur_pairs* p, FILE* f);
+struct co_occur* co_occur_pairs_pack(struct co_occur_pairs* p, int num_rows);
+int co_occur_pairs_num_rows(struct co_occur_pairs* p);
 void co_occur_pairs_free(struct co_occur_pairs* p);
 
 #endif
