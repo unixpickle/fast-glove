@@ -3,6 +3,7 @@
 
 #include <math.h>
 #include <stdio.h>
+#include <stdlib.h>
 #include "matrix.h"
 #include "util.h"
 #include "word_list.h"
@@ -10,8 +11,8 @@
 static int next_match(struct matrix* m, float* worse_than, int row);
 
 int main(int argc, const char** argv) {
-  if (argc != 4) {
-    fprintf(stderr, "Usage: %s <word_list> <embed_file> <word>\n", argv[0]);
+  if (argc != 4 && argc != 5) {
+    fprintf(stderr, "Usage: %s <word_list> <embed_file> <word> [num_neighbors]\n", argv[0]);
     return 1;
   }
 
@@ -20,6 +21,10 @@ int main(int argc, const char** argv) {
   const char* word_list_path = argv[1];
   const char* embed_path = argv[2];
   const char* word = argv[3];
+  int num_neighbors = 10;
+  if (argc == 5) {
+    num_neighbors = atoi(argv[4]);
+  }
 
   struct word_list* words;
   struct inv_word_list* inv;
@@ -39,7 +44,7 @@ int main(int argc, const char** argv) {
   printf("neighbors for word id: %d\n", word_index);
 
   float best_corr = 2.0;
-  for (int i = 0; i < 10; ++i) {
+  for (int i = 0; i < num_neighbors; ++i) {
     int match = next_match(matrix, &best_corr, word_index);
     printf("%d %s (%f)\n", match, word_list_lookup(words, match), best_corr);
   }
