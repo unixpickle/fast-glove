@@ -12,22 +12,29 @@
 #define STEP_SIZE 0.05
 #define ROUND_STEPS 10000000
 
-static struct co_occur_pairs* read_pairs(const char* path);
+static struct co_occur_pairs* read_pairs(const char* path,
+                                         const char** extras,
+                                         int num_extra);
 static int save(struct matrix* words, const char* output_path);
 
 int main(int argc, const char** argv) {
-  if (argc != 4) {
-    fprintf(stderr, "Usage: %s <co_occur_file> <num_epochs> <output_file>\n",
-            argv[0]);
+  if (argc < 4) {
+    fprintf(
+        stderr,
+        "Usage: %s <co_occur_file> <num_epochs> <output_file> [extra_co ...]\n",
+        argv[0]);
     return 1;
   }
 
   const char* co_occur_path = argv[1];
   int num_epochs = atoi(argv[2]);
   const char* output_path = argv[3];
+  const char** extra_co_paths = &argv[4];
+  int num_extra_cos = argc - 4;
 
   printf("Reading co-occurrences...\n");
-  struct co_occur_pairs* pairs = read_pairs(co_occur_path);
+  struct co_occur_pairs* pairs =
+      read_pairs(co_occur_path, extra_co_paths, num_extra_cos);
   if (!pairs) {
     fprintf(stderr, "failed to read co-occurrences.\n");
     return 1;
@@ -76,13 +83,47 @@ int main(int argc, const char** argv) {
   return 0;
 }
 
-static struct co_occur_pairs* read_pairs(const char* path) {
+static struct co_occur_pairs* read_pairs(const char* path,
+                                         const char** extras,
+                                         int num_extra) {
   FILE* f = fopen(path, "r");
   if (!f) {
     return NULL;
   }
   struct co_occur_pairs* pairs = co_occur_pairs_read(f);
   fclose(f);
+  if (!pairs || !num_extra) {
+    return pairs;
+  }
+
+  struct co_occur* co =
+      co_occur_pairs_pack(pairs, co_occur_pairs_num_rows(pairs));
+  co_occur_pairs_free(pairs);
+  if (!co) {
+    return NULL;
+  }
+
+  for (int i = 0; i < num_extra; ++i) {
+    f = fopen(extras[i], "r");
+    if (!f) {
+      co_occur_free(co);
+      return NULL;
+    }
+    pairs = co_occur_pairs_read(f);
+    fclose(f);
+    if (!pairs) {
+      co_occur_free(co);
+      return NULL;
+    }
+    for (int j = 0; j < pairs->num_pairs; ++j) {
+      struct co_occur_pair* pair = &pairs->pairs[j];
+      co_occur_add(co, pair->word1, pair->word2, pair->count);
+    }
+    co_occur_pairs_free(pairs);
+  }
+
+  pairs = co_occur_pairs_new(co);
+  co_occur_free(co);
   return pairs;
 }
 
