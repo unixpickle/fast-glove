@@ -6,10 +6,8 @@
 #include "chan.h"
 #include "hash_map.h"
 
-#define DELIMITERS " \t\n,\"'.!;()/"
-#define IS_DELIMITER(c)                                                       \
-  (c == ' ' || c == '\t' || c == '\n' || c == ',' || c == '"' || c == '\'' || \
-   c == '.' || c == '!' || c == ';' || c == '(' || c == ')' || c == '/')
+#define DELIMITERS " \t\n"
+#define IS_DELIMITER(c) (c == ' ' || c == '\t' || c == '\n')
 
 struct co_build_ctx {
   struct inv_word_list* list;
@@ -97,7 +95,7 @@ struct co_occur* build_co_occur(struct inv_word_list* list,
         document[i] = 0;
         break;
       }
-      document[i] = (char)tolower(ch);
+      document[i] = (char)ch;
       if (ch == 0) {
         break;
       }
@@ -152,7 +150,7 @@ struct word_list* build_word_list(FILE* documents, int max_words) {
         }
       }
     } else {
-      word[word_len++] = (char)tolower(ch);
+      word[word_len++] = (char)ch;
     }
   }
   struct word_list* result = hash_map_words(h, max_words);
